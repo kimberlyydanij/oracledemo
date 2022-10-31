@@ -399,3 +399,53 @@ FROM employees;
 SELECT count(DISTINCT commission_pct) --7
 FROM employees;
 
+-- 집계함수와 단순컬럼은 함께 사용할 수 없다. (출력되는 레코드(row)수가 다르기 때문이다.)
+-- ORA-00937: not a single-group group function(단일 그룹의 그룹함수가 아닙니다.)
+
+SELECT first_name, count(*) 
+FROM employees;
+
+-- 그룹함수와 단순칼럼을 사용하기 위해서는 단순컬럼을 그룹화 해야 한다. (GROUP BY)
+SELECT department_id, count(*) 
+FROM employees
+GROUP BY department_id
+ORDER BY department_id;
+
+--50이하인 부서번호에 대해서 NULL이 아닌 부서별의 직원수를 출력하시오.
+SELECT department_id, count(*)
+FROM employees
+WHERE department_id <= 50
+    AND department_id IS NOT NULL
+GROUP BY department_id;
+
+--HAVING은 GROUP 설정한 것에서 조건을 걸 수 있다.
+SELECT department_id, count(*)
+FROM employees
+WHERE department_id IS NOT NULL
+GROUP BY department_id
+HAVING department_id <= 50;
+
+-- 부서별 직원수가 5 이하인 경우만 출력하시오
+SELECT department_id, count(*)
+FROM employees
+GROUP BY department_id
+HAVING count(*) <= 5;
+
+-- 업무별 (job_id) 급여합계를 출력하시오.
+SELECT job_id, sum(salary)
+FROM employees
+GROUP BY job_id;
+
+-- 부서별 최소급여, 최대급여
+SELECT department_id, min(salary), max(salary)
+FROM employees
+GROUP BY department_id
+HAVING min(salary) != max(salary)
+ORDER BY department_id;
+
+SELECT department_id
+FROM employees
+ORDER BY department_id DESC;
+
+SELECT rownum, first_name, salary
+FROM employees;
