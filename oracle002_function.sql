@@ -447,5 +447,65 @@ SELECT department_id
 FROM employees
 ORDER BY department_id DESC;
 
+
+/*-------------------------------------------------------
+ROWNUM
+1. oracle의 SELECT문 결과에 대해서 논리적인 일련번호를 부여한다.
+2. ROWNUM은 조회되는 행수를 제한할 때 많이 사용한다.
+3.  rownum=1, rownum<=3   (가능)
+     rownum=3, rownum>=3  (불가능)
+-------------------------------------------------------*/
+
 SELECT rownum, first_name, salary
-FROM employees;
+FROM employees;    --0
+
+SELECT rownum, first_name, salary
+FROM employees
+WHERE rownum = 1;  --0
+
+SELECT rownum, first_name, salary
+FROM employees
+WHERE rownum <= 3; --0
+
+SELECT rownum, first_name, salary
+FROM employees
+WHERE rownum = 3;  --X
+
+
+/*------------------------------------------------------
+ROWID
+1. oracle에서 데이터를 구분할 수 있는 유일한 값이다.
+2. select문에서 rowid룰 사용할 수 있다.
+3. rowid를 통해서 데이터가 어떤 데이터파일, 어느 블록에 저장되어있는지 알 수 있다.
+4. rowid 구조 (총 18자리)
+    오브젝트 번호 (1-6) : 오브젝트 별로 유일한 값을 가지고 있으며, 해당 오브젝트가 속해있는 값이다.
+    파일번호(7-9)        : 테이블스페이스(tablespace)에 속해 있는 데이터 파일에 대한 상대 파일번호 이다.
+    블록번호(10-15)     : 데이터 파일 내부에서 어느 블록에 데이터가 있는지 알려준다.
+    데이터번호(16-18)  : 데이터 블록에 데이터가 저장되어 있는 순서를 의미한다.
+
+[block size 확인] - 8kbyte가 저장됨    
+SQL> conn sys/a1234 as sysdba
+Connected.
+SQL> show user
+USER is "SYS"
+SQL> show parameter db_block size
+
+NAME                                 TYPE
+------------------------------------ ----------------------
+VALUE
+------------------------------
+db_block_buffers                     integer
+0
+db_block_checking                    string
+FALSE
+db_block_checksum                    string
+TYPICAL
+db_block_size                        integer
+8192   
+    
+    
+------------------------------------------------------*/
+SELECT rowid, first_name, salary
+FROM employees
+
+
