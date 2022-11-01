@@ -190,9 +190,10 @@ FROM employees w JOIN employees m
 ON w.manager_id=m.employee_id
 ORDER BY w.employee_id;
 
-
-
-
 /*------------------------------------------------
-5. 
+USING
 ------------------------------------------------*/
+SELECT department_id, first_name, job_id, department_name
+FROM employees Inner join departments USING(department_id)
+--ON emp.department_id=dept.department_id;
+WHERE department_id=30;
