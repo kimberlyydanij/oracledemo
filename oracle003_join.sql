@@ -58,3 +58,141 @@ SELECT e.first_name, e.job_id, j.min_salary, j.max_salary
 FROM employees e inner join jobs j
 ON e.job_id = j.job_id
 WHERE e.job_id='FI_MGR';
+
+/*
+선행테이블 Driving table, 후행테이블 Driven table
+*/
+
+-- 부서가 'Seattle'에 있는 부서에서 근무하는
+-- 직원들의 first_name, hire_date, department_name, city를
+-- 출력하는 SELECT를 작성하시오.
+
+SELECT e.first_name, e.hire_date, d.department_name, l.city
+FROM employees e, departments d, locations l
+WHERE e.department_id=d.department_id
+    AND d.location_id=l.location_id
+    AND l.city='Seattle';
+    
+SELECT e.first_name, e.hire_date, d.department_name, l.city
+FROM employees e INNER JOIN departments d
+ON e.department_id=d.department_id
+INNER JOIN locations l
+ON d.location_id=l.location_id
+WHERE l.city='Seattle';
+
+--20번 부서의 이름과 그 부서에 근무하는 사원의 이름(first_name)을 출력하시오.
+SELECT d.department_id, d.department_name, e.first_name
+FROM employees e, departments d
+WHERE e.department_id=d.department_id
+AND d.department_id=20;
+
+SELECT d.department_id, d.department_name, e.first_name
+FROM employees e INNER JOIN departments d
+ON e.department_id=d.department_id
+WHERE d.department_id=20;
+
+--1400,1500번 위치의 도시이름과 그 곳에 있는 부서의 이름을 출력하시오.
+SELECT l.location_id, l.city, d.department_id
+FROM locations l, departments d
+WHERE l.location_id=d.location_id
+AND l.location_id IN(1400,1500);
+
+SELECT l.location_id, l.city, d.department_id
+FROM locations l INNER JOIN departments d
+ON l.location_id=d.location_id
+WHERE l.location_id IN(1400,1500);
+
+/*----------------------------------------
+2. certeian product(카티션 곱) 조인 : 
+    테이블 행의 갯수만큼 출력해주는 조인이다.
+    --------------------------------------*/
+-- 1) oracle 용 certeian product
+SELECT e.department_id, e.first_name, e.job_id, j.job_title
+FROM employees e, jobs j;
+
+SELECT count(*) FROM employees; --107
+SELECT count(*) FROM jobs; --19
+
+-- 2) ansi용  cross join
+SELECT e.department_id, e.first_name, e.job_id, j.job_title
+FROM employees e CROSS JOIN jobs j;
+
+/*------------------------------------------
+3. NATURAL JOIN
+    두 테이블간의 동일한 이름을 갖는 모든 컬럼들에 대해 EQUI(=) JOIN을 수행한다.
+    ORACLE에서는 가능하나 SQL Server에서는 지원하지 않는 기능이다.
+---------------------------------------------------------*/
+SELECT first_name, salary, department_id, department_name
+FROM employees NATURAL JOIN  departments;
+
+SELECT first_name, salary, d.department_id, department_name
+FROM employees e INNER JOIN  departments d
+ON e.department_id=d.department_id;
+
+/*------------------------------------------------
+4. NON-EQUI JOIN
+  (=) 동등비교연산자를 제외한 >=, <=, >, <등의 연산자를 이용해서
+  조건을 지정하는 방법이다.
+------------------------------------------------*/
+
+--1) Oracle용 NON-EQUI JOIN
+    SELECT e.first_name, e.salary, j.min_salary, j.max_salary, j.job_title
+    FROM employees e, jobs j
+    WHERE e.job_id=j.job_id
+    AND e.salary >= j.min_salary
+    AND e.salary <= j.max_salary;
+    
+--2) ANSI용 NON-EQUI JOIN
+    SELECT e.first_name, e.salary, j.min_salary, j.max_salary, j.job_title
+    FROM employees e JOIN jobs j
+    ON e.job_id=j.job_id
+    WHERE e.salary >= j.min_salary
+    AND e.salary <= j.max_salary;
+    
+/*------------------------------------------------
+5.  OUTER JOIN
+한 테이블은 데이터가 있고, 다른 반대쪽에는 데이터가 없는 경우에 
+데이터가 있는 테이블의 내용을 모두 가져오는 조건이다.
+------------------------------------------------*/
+SELECT e.first_name, e.employee_id, e.department_id, d.department_id, d.department_name
+FROM employees e, departments d
+WHERE e.department_id=d.department_id(+); --LEFT OUTER JOIN 
+
+SELECT e.first_name, e.employee_id, e.department_id, d.department_id, d.department_name
+FROM employees e LEFT OUTER JOIN departments d
+ON e.department_id=d.department_id(+); --LEFT OUTER JOIN 
+
+SELECT e.first_name, e.employee_id, e.department_id, d.department_id, d.department_name
+FROM employees e, departments d
+WHERE e.department_id(+) =d.department_id; --RIGHT OUTER JOIN 
+
+SELECT e.first_name, e.employee_id, e.department_id, d.department_id, d.department_name
+FROM employees e RIGHT OUTER JOIN departments d
+ON e.department_id(+) =d.department_id; --RIGHT OUTER JOIN 
+
+/*------------------------------------------------
+6. SELF JOIN
+    하나의 테이블을 두개의 테이블로 설정해서 사용하는 조인방법이다.
+    하나의 테이블에 같은 데이터가 두개의 컬럼에 다른 목적으로 저장도어 있는 경우
+    employees, imployee_id, manager_id
+------------------------------------------------*/
+
+--1) ORACLE SELF JOIN
+SELECT w.employee_id AS 사원번호, w.first_name AS 사원이름, w.manager_id AS 매니저번호,  m.first_name AS 매니저이름
+FROM employees w, employees m
+WHERE w.manager_id=m.employee_id
+ORDER BY w.employee_id;
+ 
+ --2) ANSI SELF JOIN
+ 
+ SELECT w.employee_id AS 사원번호, w.first_name AS 사원이름, w.manager_id AS 매니저번호,  m.first_name AS 매니저이름
+FROM employees w JOIN employees m
+ON w.manager_id=m.employee_id
+ORDER BY w.employee_id;
+
+
+
+
+/*------------------------------------------------
+5. 
+------------------------------------------------*/

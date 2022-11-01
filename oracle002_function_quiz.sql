@@ -92,3 +92,24 @@ HAVING count(department_id) > 10;
 SELECT first_name
 FROM employees
 WHERE first_name LIKE '__e%';
+
+SELECT first_name
+FROM employees
+WHERE substr(first_name, 3, 1)='e';
+
+
+--instr(데이터, 찾을문자, 시작위치, 순서)
+SELECT first_name
+FROM employees
+WHERE instr(first_name, 'e')=3;
+
+SELECT first_name
+FROM employees
+WHERE instr(first_name, 'e', 3, 1)='3';
+
+SELECT instr('korea','e',2,2)
+FROM dual; --0
+
+SELECT instr('koreae','e',2,2)
+FROM dual; --6
+
