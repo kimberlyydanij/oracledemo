@@ -10,10 +10,39 @@ WHERE d.location_id=l.location_id
 
     
 2)사번이 107인 사원과 부서가같고,167번의 급여보다 많은 사원들의 사번,이름(first_name),급여를 출력하시오.
-   
+
+SELECT  employee_id, first_name, salary 
+FROM (
+                SELECT employee_id, first_name, salary
+                FROM employees
+                WHERE employee_id=107
+           ) emp
+WHERE salary > emp.salary;   
                   
+
+SELECT  employee_id, first_name, salary 
+FROM employees
+
+
+ 
+                 
 3) 급여평균보다 급여를 적게받는 사원들중 커미션을 받는 사원들의 사번,이름(first_name),급여,커미션 퍼센트를 출력하시오.
-    
+
+SELECT employee_id, first_name, salary, commission_pct
+FROM (
+
+            SELECT employee_id, first_name, salary, commission_pct
+            FROM (
+                        SELECT avg(salary)
+                        FROM employees
+                        )emp
+        
+            WHERE salary < emp.avg(salary)
+            
+               SELECT avg(salary)
+                        FROM employees     
+           
+               
     
 4)각 부서의 최소급여가 20번 부서의 최소급여보다 많은 부서의 번호와 그부서의 최소급여를 출력하시오.
  
