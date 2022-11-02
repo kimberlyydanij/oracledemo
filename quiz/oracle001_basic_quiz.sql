@@ -41,38 +41,65 @@
   커미션을 출력하시오.
   SELECT first_name, salary, commission_pct
   FROM employees
-  WHERE salary <= 17000 AND commission_pct IS NOT NULL;
+  WHERE salary <= 17000 AND commission_pct IS NOT NULL
+  ORDER BY commission_pct;
  
   
 8) 2005년도에 입사한 사원의 사원명(first_name),입사일을 출력하시오.
     SELECT first_name, hire_date
     FROM employees
-    WHERE hire_date('yyyy') ='2005';
+    WHERE to_char(hire_date,'yyyy') >= '2005'
+    ORDER BY hire_date ;
  
 
 9) 커미션 지급 대상인 사원의 사원명(first_name), 커미션을 출력하시오.
+    SELECT first_name, commission_pct
+    FROM employees
+    WHERE commission_pct IS NOT NULL
+    ORDER BY commission_pct;
  
 
 10) 사번이 206인 사원의 이름(first_name)과 급여를 출력하시오.
-
+    SELECT employee_id,first_name, salary
+    FROM employees
+    WHERE employee_id = 206;
 
 11) 급여가 3000이 넘는 업무(job_id),급여(salary)를 출력하시오.
-
+    SELECT job_id, salary
+    FROM employees
+    WHERE salary > 3000
+    ORDER BY salary;
 
 12)'ST_MAN'업무을 제외한 사원들의 사원명(first_name)과 업무(job_id)을 출력하시오.
+    SELECT first_name, job_id
+    FROM employees
+    WHERE job_id NOT LIKE 'ST_MAN'
+    ORDER BY JOB_ID;
 
-
-13) 업무이 'PU_CLERK' 인 사원 중에서 급여가 10000 이상인 사원명(first_name),업무(job_id),급여(salary)을 출력하시오.
-
+13) 업무가 'PU_CLERK' 인 사원 중에서 급여가 10000 이상인 사원명(first_name),업무(job_id),급여(salary)을 출력하시오.
+    SELECT first_name, job_id, salary
+    FROM employees
+    WHERE job_id = 'PU_CLERK' AND salary >= 10000
+    ORDER BY salary;
 
 14) commission을 받는 사원명(first_name)을 출력하시오.
- 
+    SELECT first_name, commission_pct
+    FROM employees
+    WHERE commission_pct IS NOT NULL
+    ORDER BY first_name;
 
 15) 20번 부서와 30번 부서에 속한 사원의 사원명(fist_name), 부서를 출력하시오.
-
-   
+    SELECT e.first_name, d.department_id, d.department_name
+    FROM employees e, departments d
+    WHERE e.department_id = d.department_id
+    AND e.department_id IN(20,30);
 
 16) 급여가 많은 사원부터 출력하되 급여가 같은 경우 사원명(first_name) 순서대로 출력하시오.
- 
+    SELECT first_name, salary
+    FROM employees
+    ORDER BY  salary DESC, first_name;
 
 17) 업무이 'MAN' 끝나는 사원의 사원명(first_name), 급여(salary), 업무(job_id)을 출력하시오.
+    SELECT first_name, salary, job_id
+    FROM employees
+    WHERE job_id LIKE '%MAN';
