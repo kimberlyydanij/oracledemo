@@ -134,3 +134,58 @@ WHERE first_name='candy';
 /*자동커밋 설정 확인(SQL Developer)
 도구>환경설정>데이터베이스>객체뷰어> 행변경시 사후편집, 자동커밋 설정 체크 해제 */
 
+SELECT * FROM emp01;
+SELECT * FROM hr.emp01;
+SELECT * FROM user_tables;
+SELECT table_name FROM user_tables;
+SELECT table_name FROM user_tables
+WHERE table_name = 'EMP01';
+
+COMMIT;
+
+INSERT INTO emp01
+VALUES('Beata', 7000);
+
+SELECT * FROM emp01;
+COMMIT;
+
+INSERT INTO emp01
+VALUES('John', 2000);
+
+SAVEPOINT sp;
+
+DELETE FROM emp01
+WHERE first_name = 'Beata';
+
+ROLLBACK TO sp;
+
+CREATE TABLE emp02(
+    emp_id number primary key, /* NOT NULL + UNIQUE */
+    first_name varchar2(50), 
+    salary number
+);
+
+-- A세션
+INSERT INTO emp02
+VALUES(1,'park',9000);
+
+SELECT * FROM emp02;
+
+-- B세션
+INSERT INTO emp02
+VALUES(1,'park',9000);
+/*waiting 상태가 됨(Lock 상태 발생) */
+
+
+-- A세션
+COMMIT;
+--B세션
+--A세션이 commit이 되면 B세션은 해당 행에 대한 Lock상태가 해제되면서 오류메세지 출력
+--ORA-00001: unique constraint (HR.SYS_C006997) violated
+
+--B세션
+SELECT * FROM emp02;
+INSERT INTO emp02
+VALUES(2,'dong',8000)
+
+commit;
