@@ -54,3 +54,5 @@ WHERE num=3;
 
 INSERT INTO emp09(num,name)
 VALUES(emp09_num_seq.nextval, '이준기');
+
+SELECT FROM departments WHERE department_name LIKE '%IT%' ORDER BY department_id";
